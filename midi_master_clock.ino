@@ -1,3 +1,14 @@
+// =====================================
+// Midi Master Clock
+// Modified code for Arduino Mega 2560, Sparkfun MIDI shield and 
+// Arducam Liquid Crystal display.
+// Original at: https://github.com/DieterVDW/arduino-midi-clock
+// 12/16/2016
+// Source: https://github.com/freonirons409/midi_master_clock
+// Author: Aaron Irons (hey@aaronirons.net)
+// Website: https://www.aaronirons.net
+// =====================================
+
 #include <TimerOne.h>
 #include <LiquidCrystal.h>
 
@@ -118,7 +129,7 @@ void setup() {
   //init LCD
   lcd.begin(16, 2);
   // Print a message to the LCD.
-  lcd.print("FUCK YEAH! v666");
+  lcd.print("MIDI CLOCK! v666");
   
   // Get the saved BPM value from 2 stored bytes: MSB LSB
   bpm = EEPROM.read(EEPROM_ADDRESS) << 8;
@@ -145,7 +156,7 @@ void setup() {
   lcd.print("BPM:");
   lcd.setCursor(5, 1);
   setDisplayValue(bpm);
-  Serial.write(MIDI_STOP);
+  //Serial.write(MIDI_STOP);
 }
 
 void loop() {  
@@ -177,7 +188,6 @@ void loop() {
   int curDimValue = analogRead(DIMMER_INPUT_PIN);
   if (curDimValue > lastDimmerValue + DIMMER_CHANGE_MARGIN
       || curDimValue < lastDimmerValue - DIMMER_CHANGE_MARGIN) {
-    // We've got movement!!
     bpm = map(curDimValue, 0, 1024, MINIMUM_BPM, MAXIMUM_BPM);
     updateBpm(now);
     lastDimmerValue = curDimValue;
@@ -206,9 +216,7 @@ void loop() {
   /*
    * Check for start/stop button pressed
    */
-  //boolean startStopPressed = (START_STOP_PIN_POLARITY - analogRead(START_STOP_INPUT_PIN)) > 1024 / 2 ? true : false;
   startStopPressed = digitalRead(START_STOP_INPUT_PIN);
-  //Serial.println(startStopPressed);
   
   if (startStopPressed == 0 && (lastStartStopTime + (DEBOUNCE_INTERVAL * 1000)) < now) {
     startOrStop();
@@ -239,15 +247,12 @@ void tapInput() {
 
   timesTapped++;
   lastTapTime = now;
-  //Serial.println("Tap!");
 }
 
 void startOrStop() {
   if (!playing) {
-    //Serial.println("Start playing");
     Serial.write(MIDI_START);
   } else {
-    //Serial.println("Stop playing");
     Serial.write(MIDI_STOP);
   }
   playing = !playing;
@@ -295,10 +300,6 @@ void updateBpm(long now) {
   //EEPROM.write(EEPROM_ADDRESS + 1, bpm % 256);
 #endif
 
-//  Serial.print("Set BPM to: ");
-//  Serial.print(bpm / 10);
-//  Serial.print('.');
-//  Serial.println(bpm % 10);
   lcd.setCursor(0, 1);
   lcd.print("BPM:");
   setDisplayValue(bpm);
@@ -308,7 +309,6 @@ void setDisplayValue(int value) {
 //  value >= 1000 ? lcd.print(value / 1000) : 0x00;
 //  value >= 100 ? lcd.print((value / 100) % 10) : 0x00;
   lcd.setCursor(5, 1);
-  //Serial.println(value);
   lcd.print(value);
   if(value < 100) {
     lcd.setCursor(7, 1);
