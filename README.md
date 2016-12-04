@@ -1,9 +1,7 @@
 # Arduino Midi Master Clock
-=============
 Arduino project for create a master midi clock generator with start/stop and tap tempo functionality.
 
 ##Parts Needed
--------
 * Arduino Mega 2560 R3 (https://www.arduino.cc/en/Main/ArduinoBoardMega2560)
 * Sparkfun Midi Shield kit (https://www.sparkfun.com/products/12898)
 * Arduino LCD 1602A 16x2 (https://www.adafruit.com/products/181)
@@ -13,7 +11,6 @@ Arduino project for create a master midi clock generator with start/stop and tap
 * Jumper wire
 
 ##Assembly
--------
 1. Follow the necessary steps to assemble the LCD screen, and the Sparkfun MIDI shield per the instructions included with each one. On the MIDI shield, you can leave off the POT for A0 if you want, it will not be used for this project. Also recommend not mounting the MIDI I/O connectors directly to the board but instead use wire so that they can be moved around inside whatever encloser you wanted.  Same with any of the pots and buttons on the MIDI shield--leave them free from the board if you have an enclosure in mind. They are a bitch to take off later.
 2. On the LCD header strip, invert the pin so that it does not go into Arduino input 51, but instead sticks out the opposite direction--this will have a jumper cable attached to it later.
 0. Insert the LCD strip header pins into the bottom row of Digital I/O on the Arduino Mega board so that PIN 1 of the LCD goes into the first GND pin, then the rest should line of as follows:
